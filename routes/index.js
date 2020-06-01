@@ -106,8 +106,8 @@ router.get('/soudiiz', function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* GET Spotify ?? */
-router.get('/spotify', function(req, res, next) {
-});
 
 
 
+
+module.exports = router;
