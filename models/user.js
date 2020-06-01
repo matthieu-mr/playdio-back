@@ -5,7 +5,7 @@ var musicAccounts = mongoose.Schema({
 })
 var notifications = mongoose.Schema({
     date:Date,
-    content:Text,
+    content:String,
     type:String,
     newField:String,
     userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
@@ -15,7 +15,7 @@ var preferences = mongoose.Schema({
     theme:String
 })
 const userSchema = mongoose.Schema({
-    firtName: String,
+    firstName: String,
     lastName: String,
     email: String,
     password: String,

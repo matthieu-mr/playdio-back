@@ -10,28 +10,24 @@ router.post('/sign-in', function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* POST sign-up */
-router.post('/sign-up', function(req, res, next) {
-  
-  var user = await userModel.find({email:req.body.email})
-  /* if(si l'utisateur n'a pas de compte musique) */
+router.post('/sign-up',async function(req, res, next) {
+  console.log('je suis dans sigu-up')
+  console.log(req.body.firstName)
+  /* var user = await userModel.find({email:req.body.email}) */
+
   var newUser = await new userModel({
-    firtName: req.body.firtName,
+    firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   })
+  console.log("user cree")
   await newUser.save()
-  /* else if(l'utisateur a un compte spotify) */
-/*   var newUser = await new userModel({
-    firtName: req.body.firtName,
-    lastName: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  })
- */
+  console.log("user save")
+  
 
+  console.log("log  user",newUser)
 
-  /* else if(l'utisateur a un compte deezer) */
   res.json({result:true,dataUser:newUser});
 });
 
@@ -109,5 +105,5 @@ router.get('/soudiiz', function(req, res, next) {
 router.get('/spotify', function(req, res, next) {
 });
 
-
+module.exports = router;
 
