@@ -16,19 +16,18 @@ router.get('/', function(req, res, next) {
 router.get('/soudiiz', function(req, res, next) {
 
 // req exemple : https://soundiiz.com/v1/openapi/lookup/track/US43C1603405/sources?access_token=48c1c9b73c444307914965a24ffa8c40
+
   let apiToken ="48c1c9b73c444307914965a24ffa8c40" // token from soundiiz
-  let isrcTrackToSearch = "US43C1603405" // 
+  
+  let isrcTrackToSearch = "US43C1603405" // isrc of the track
   
   let urlSoundiiz ="https://soundiiz.com/v1/openapi/lookup/track/"+isrcTrackToSearch+"/sources?access_token="+apiToken
- 
-
-  var reqSoundiz = request('GET', urlSoundiiz);
-  let repSoundiz=JSON.parse(reqSoundiz.getBody())
-  console.log(repSoundiz)
+    let reqSoundiz = request('GET', urlSoundiiz);
+    let repSoundiz=JSON.parse(reqSoundiz.getBody()) // ---> request result
+    console.log(repSoundiz) // ---> result from the request 
 
     res.json({ repSoundiz });
 
- // res.render('index', { title: 'Express' });
 });
 
 
