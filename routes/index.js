@@ -15,7 +15,8 @@ router.post('/sign-up', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* GET home page === radio page ? */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  // Backend affiché sur Heroku
+  res.render('index', { title: 'Playdio' });
 });
 
 /* --------------------------------------------------------- */
