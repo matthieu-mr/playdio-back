@@ -39,6 +39,12 @@ router.delete('/radio-delete', function(req, res, next) {
 });
 
 /* --------------------------------------------------------- */
+/* GET search */
+router.get('/search', function(req, res, next) {
+});
+
+
+/* --------------------------------------------------------- */
 /* GET music play */
 router.get('/play', function(req, res, next) {
 });
@@ -51,11 +57,6 @@ router.get('/settings', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* DELETE account */
 router.delete('/account-delete', function(req, res, next) {
-});
-
-/* --------------------------------------------------------- */
-/* GET search */
-router.get('/search', function(req, res, next) {
 });
 
 /* --------------------------------------------------------- */
