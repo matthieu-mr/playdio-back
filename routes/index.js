@@ -2,20 +2,67 @@ var express = require('express');
 var router = express.Router();
 var request = require('sync-request');
 
+/* --------------------------------------------------------- */
+/* POST sign-in */
+router.post('/sign-in', function(req, res, next) {
+});
 
+/* --------------------------------------------------------- */
+/* POST sign-up */
+router.post('/sign-up', function(req, res, next) {
+});
 
-
-/* GET home page. */
+/* --------------------------------------------------------- */
+/* GET home page === radio page ? */
 router.get('/', function(req, res, next) {
-  console.log("hello bibiche")
   res.render('index', { title: 'Express' });
 });
 
+/* --------------------------------------------------------- */
+/* GET radio */
+router.get('/radio', function(req, res, next) {
+});
 
+/* --------------------------------------------------------- */
+/* POST radio create */
+router.post('/radio-create', function(req, res, next) {
+});
 
+/* --------------------------------------------------------- */
+/* PUT radio update */
+router.put('/radio-update', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* DELETE radio delete */
+router.delete('/radio-delete', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* GET music play */
+router.get('/play', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* GET settings */
+router.get('/settings', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* DELETE account */
+router.delete('/account-delete', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* GET search */
+router.get('/search', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* GET Soundiiz */
 router.get('/soudiiz', function(req, res, next) {
 
-// req exemple : https://soundiiz.com/v1/openapi/lookup/track/US43C1603405/sources?access_token=48c1c9b73c444307914965a24ffa8c40
+  // req exemple : https://soundiiz.com/v1/openapi/lookup/track/US43C1603405/sources?access_token=48c1c9b73c444307914965a24ffa8c40
 
   let apiToken ="48c1c9b73c444307914965a24ffa8c40" // token from soundiiz
   
@@ -30,8 +77,11 @@ router.get('/soudiiz', function(req, res, next) {
 
 });
 
-
-
 /* Add soudiiz  */
+
+/* --------------------------------------------------------- */
+/* GET Spotify ?? */
+router.get('/spotify', function(req, res, next) {
+});
 
 module.exports = router;
