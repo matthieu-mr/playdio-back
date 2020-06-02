@@ -20,7 +20,7 @@ var chat = mongoose.Schema({
     text:String,
     userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
 })
-const radioModel = mongoose.Schema({
+const radioSchema = mongoose.Schema({
     name: String,
     private: Boolean,
     link: String,
@@ -33,6 +33,6 @@ const radioModel = mongoose.Schema({
     chat:[chat]
 })
 
-const radioModel = mongoose.model('radio', userSchema)
+const radioModel = mongoose.model('radio', radioSchema)
 
 module.exports = radioModel
