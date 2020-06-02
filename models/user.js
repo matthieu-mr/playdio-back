@@ -5,7 +5,7 @@ var musicAccounts = mongoose.Schema({
 })
 var notifications = mongoose.Schema({
     date:Date,
-    content:Text,
+    content:String,
     type:String,
     newField:String,
     userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]

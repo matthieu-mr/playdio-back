@@ -10,7 +10,7 @@ router.post('/sign-in', function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* POST sign-up */
-router.post('/sign-up', function(req, res, next) {
+router.post('/sign-up', async function(req, res, next) {
   
   var user = await userModel.find({email:req.body.email})
   /* if(si l'utisateur n'a pas de compte musique) */
@@ -109,5 +109,5 @@ router.get('/soudiiz', function(req, res, next) {
 router.get('/spotify', function(req, res, next) {
 });
 
-
+module.exports = router;
 
