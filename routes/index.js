@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require('../models/user')
+var radioModel = require('../models/radio')
 var request = require('sync-request');
 
 /* --------------------------------------------------------- */
@@ -14,21 +15,19 @@ router.post('/sign-up',async function(req, res, next) {
   console.log('je suis dans sigu-up')
   console.log(req.body.firstName)
   /* var user = await userModel.find({email:req.body.email}) */
-
-  var newUser = await new userModel({
+  /* if(!user){ */
+      var newUser = await new userModel({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
   })
-  console.log("user cree")
-  await newUser.save()
-  console.log("user save")
+    await newUser.save()
+    res.json({result:true,dataUser:newUser});
+  /* } */
+  res.json({result:false});
+
   
-
-  console.log("log  user",newUser)
-
-  res.json({result:true,dataUser:newUser});
 });
 
 /* --------------------------------------------------------- */
