@@ -168,10 +168,6 @@ router.get('/user-search', function(req, res, next) {
         accept: 'application/json' },
       })
     var response = JSON.parse(requestPlaylist.getBody())
-
-
-    console.log(response)
-  
     res.json({response})
   });
   
