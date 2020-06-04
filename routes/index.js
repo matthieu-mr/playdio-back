@@ -155,7 +155,7 @@ var requestPlaylist = request('GET','https://api.spotify.com/v1/users/1127664154
 /* --------------------------------------------------------- */
 /* GET Spotify Search */
 
-router.get('/user-search', function(req, res, next) {
+router.post('/user-search', function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
 
