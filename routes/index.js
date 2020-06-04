@@ -3,20 +3,38 @@ var router = express.Router();
 var userModel = require('../models/user')
 var radioModel = require('../models/radio')
 var request = require('sync-request');
+var  btoa  = require ( 'btoa' ) ; 
 /* info compte api spotify */
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
 var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
-/* --------------------------------------------------------- */
-/* GET/post autorisation/save token Spotify */
-router.get('/autorisation',function(req,res,next){
-  
-res.json({clientId : client_id,redirectURI: redirect_uri})
-}) 
 
+/* --------------------------------------------------------- */
+/* Gestion API Spotify */
+/* function pour refresh les tokens */
+async function refreshTokens(idSpotify) {
+  const credsB64 = btoa(`${client_id}:${client_secret}`);
+  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
+  const refreshToken = user[0].musicAccounts[0].refreshToken
+  var requestSpotify = request('POST','https://accounts.spotify.com/api/token',{
+    headers:{
+      'Authorization': `Basic ${credsB64}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body:`grant_type=refresh_token&refresh_token=${refreshToken}`
+  })
+  var newToken = JSON.parse(requestSpotify.getBody())
+  await userModel.updateOne(
+    {musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}},
+    { $set: {"musicAccounts.$.accessToken": newToken.access_token}}
+  )
+}
+/* connection Spotify  */
+router.get('/autorisation',function(req,res,next){
+res.json({clientId : client_id,redirectURI: redirect_uri,clientSecret:client_secret})
+}) 
+/* recuperation information user + token */
 router.post('/saveToken',async function(req,res,next){
- /*  var newRefreshToken = await  */
-    
     var requestSpotify = request('GET','https://api.spotify.com/v1/me',{
       headers:{
         'Accept': 'application/json',
@@ -26,33 +44,46 @@ router.post('/saveToken',async function(req,res,next){
     })
     var reponse = JSON.parse(requestSpotify.getBody())
     var user = await userModel.findOne({email: reponse.email})
-    console.log(user)
-
     if(user){
-      console.log(1)
       res.json({result:"l'utilisateur existe déjà"})
     }else{
           var newUser = new userModel({
       email: reponse.email
     })
-    console.log(newUser)
       newUser.musicAccounts.push({
         platfornUserID:reponse.id,
         platformURI:reponse.uri,
         refreshToken:req.body.refreshToken,
+        accessToken:req.body.accessToken
       })
       await newUser.save()
       res.json({result:true,userInfo:newUser})
     }
-
-    
-    
-
-
-  
   }) 
   
+    /* example de request spotify */
+    router.get('/exempleRequest',async function(req, res, next) {
+      /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
+      var idSpotify = 'x7kmell0jps7njqebispe817j'
+      /* info dynamique que la requette a besoin */
+      var artist = "Audioslave"
+      var typeInfo = "track"
+      /* function qui verrifie si le tocken access et valable */
+      await refreshTokens(idSpotify)
+      /* recuperation du token access a partir de la bdd */
+      const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
+      const userAccessToken =  user[0].musicAccounts[0].accessToken
+      /* request vers spotify */
+      var requestSpotify = request('GET','https://api.spotify.com/v1/search?q='+artist+'&type='+typeInfo,{
+        headers:{
+          'Authorization': 'Bearer '+userAccessToken,
+        },
+      })
+      var response = JSON.parse(requestSpotify.getBody())
 
+      /* renvoi du json vers le front */
+      res.json({result:response})
+    });
 /* --------------------------------------------------------- */
 /* POST sign-in */
 router.post('/sign-in', function(req, res, next) {
