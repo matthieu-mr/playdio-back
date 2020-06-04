@@ -3,6 +3,55 @@ var router = express.Router();
 var userModel = require('../models/user')
 var radioModel = require('../models/radio')
 var request = require('sync-request');
+/* info compte api spotify */
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
+/* --------------------------------------------------------- */
+/* GET/post autorisation/save token Spotify */
+router.get('/autorisation',function(req,res,next){
+  
+res.json({clientId : client_id,redirectURI: redirect_uri})
+}) 
+
+router.post('/saveToken',async function(req,res,next){
+ /*  var newRefreshToken = await  */
+    
+    var requestSpotify = request('GET','https://api.spotify.com/v1/me',{
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+req.body.accessToken
+      }
+    })
+    var reponse = JSON.parse(requestSpotify.getBody())
+    var user = await userModel.findOne({email: reponse.email})
+    console.log(user)
+
+    if(user){
+      console.log(1)
+      res.json({result:"l'utilisateur existe déjà"})
+    }else{
+          var newUser = new userModel({
+      email: reponse.email
+    })
+    console.log(newUser)
+      newUser.musicAccounts.push({
+        platfornUserID:reponse.id,
+        platformURI:reponse.uri,
+        refreshToken:req.body.refreshToken,
+      })
+      await newUser.save()
+      res.json({result:true,userInfo:newUser})
+    }
+
+    
+    
+
+
+  
+  }) 
+  
 
 /* --------------------------------------------------------- */
 /* POST sign-in */
