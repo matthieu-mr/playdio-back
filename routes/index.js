@@ -158,7 +158,10 @@ var requestPlaylist = request('GET','https://api.spotify.com/v1/users/1127664154
 router.get('/user-search', function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
-  var requestPlaylist = request('GET','https://api.spotify.com/v1/search?q=penitencier&type=track',{
+
+  let title = "penitencier"
+
+  var requestPlaylist = request('GET',`https://api.spotify.com/v1/search?q=${title}&type=track`,{
     headers:
         { 
         'postman-token': '7df9b449-eb44-a946-dace-115e5ca76d41',
