@@ -11,22 +11,12 @@ router.post('/sign-in', function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* POST sign-up */
-<<<<<<< HEAD
 router.post('/sign-up', async function(req, res, next) {
   
   var user = await userModel.find({email:req.body.email})
   /* if(si l'utisateur n'a pas de compte musique) */
   var newUser = await new userModel({
     firtName: req.body.firtName,
-=======
-router.post('/sign-up',async function(req, res, next) {
-  console.log('je suis dans sigu-up')
-  console.log(req.body.firstName)
-  /* var user = await userModel.find({email:req.body.email}) */
-  /* if(!user){ */
-      var newUser = await new userModel({
-    firstName: req.body.firstName,
->>>>>>> c0d9de165cf7435bb2f72dcad994bca77ce2c756
     lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
