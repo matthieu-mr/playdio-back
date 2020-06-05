@@ -15,7 +15,7 @@ var  btoa  = require ( 'btoa' ) ;
 /* Ben 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
 var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
  */
 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
