@@ -12,11 +12,15 @@ var  btoa  = require ( 'btoa' ) ;
   var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
  */
 
-
-
-var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
-var client_secret = '7b8f199f21fb46129da726817a65ece9'; // Your secret
+/* Ben 
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
+ */
+
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -65,7 +69,8 @@ router.post('/saveToken',async function(req,res,next){
         platfornUserID:reponse.id,
         platformURI:reponse.uri,
         refreshToken:req.body.refreshToken,
-        accessToken:req.body.accessToken
+        accessToken:req.body.accessToken,
+        namePlatform:'spotify'
       })
       await newUser.save()
       res.json({result:true,userInfo:newUser})
@@ -102,21 +107,35 @@ router.post('/sign-in', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* POST sign-up */
 router.post('/sign-up', async function(req, res, next) {
-  
   var user = await userModel.find({email:req.body.email})
-  /* if(si l'utisateur n'a pas de compte musique) */
-  var newUser = await new userModel({
-    firtName: req.body.firtName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-  })
-    await newUser.save()
-    res.json({result:true,dataUser:newUser});
-  /* } */
-  res.json({result:false});
+  if(user.length > 0){
+    await userModel.updateMany(
+      {email: req.body.email},
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+      }
+    )
+    var update = await userModel.find({email:req.body.email})
+    res.json({result:update})
+  }else{
+    var newUser = await new userModel({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+    })
+      await newUser.save()
+      res.json({result:true,dataUser:newUser});
+  }
 });
-
+/* recuperation donnée pour le sign-up */
+router.post('/infoSignUp',async function(req,res,next){
+  var user = await userModel.find({email:req.body.email})
+  res.json({infoUser:user})
+})
 /* --------------------------------------------------------- */
 /* GET home page === radio page ? */
 router.get('/', function(req, res, next) {
