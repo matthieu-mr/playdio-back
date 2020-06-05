@@ -255,6 +255,31 @@ router.get('/soudiiz', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* GET Spotify ?? */
 router.get('/spotify', function(req, res, next) {
+
+/* 
+var request = require("request");
+
+var options = { method: 'GET',
+  url: 'https://api.spotify.com/v1/search',
+  qs: { q: 'isrc:US43C1603405', type: 'track' },
+  headers: 
+   { 'postman-token': '9e48c2fd-ead6-719b-2eea-ea7dc1d59d28',
+     'cache-control': 'no-cache',
+     authorization: 'Bearer BQCK0WhEac-89R81udfmce9h_tkTHnSCm5wUuEAYRMQ90-SsQYjG0AgMiLJ6HaNwsgYQHn7_ParQFnF3TJuO6_xIJN7-2MuOGwRBIK0_dB0g12m7CxjSz5_ABbRg6KheWrBfJfeNwk9NZEVydMQeDBx0fxvVFN97PAU2hEUviWOGCCbailCUnzjq0FCt7Fzu7IkB_LkrdQgJ04pSZ-gba74XvYpLFRCvy1d5Get4yiuU5uDeqthb8SdWhkRloesHu-YGbqMbRqX5IJwY',
+     'content-type': 'application/json',
+     accept: 'application/json' } };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+
+
+
+*/
+
+
 });
 
 module.exports = router;
