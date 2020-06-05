@@ -80,7 +80,6 @@ router.post('/saveToken',async function(req,res,next){
         },
       })
       var response = JSON.parse(requestSpotify.getBody())
-
       /* renvoi du json vers le front */
       res.json({result:response})
     });
@@ -105,8 +104,6 @@ router.post('/sign-up', async function(req, res, next) {
     res.json({result:true,dataUser:newUser});
   /* } */
   res.json({result:false});
-
-  
 });
 
 /* --------------------------------------------------------- */

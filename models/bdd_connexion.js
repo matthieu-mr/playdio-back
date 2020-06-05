@@ -8,7 +8,7 @@ var options = {
 mongoose.connect('mongodb+srv://admin:0000@clusterplaydio-eykl6.azure.mongodb.net/dev?retryWrites=true&w=majority',
     options,         
     function(err) {
-     console.log(err);
+    console.log(err);
     }
 );
 
