@@ -175,11 +175,9 @@ router.get('/user-playlist', async function(req, res, next) {
 
       var requestPlaylist = request('GET',`https://api.spotify.com/v1/users/${userIdSpotify}/playlists`,{
         headers:
-            { 'postman-token': 'b6ab1d2c-0ae3-17a4-7667-7a2282190533',
-            'cache-control': 'no-cache',
+            {
             'Authorization': 'Bearer '+userAccessToken,
-            'content-type': 'application/json',
-            accept: 'application/json' },
+             },
           })
         var response = JSON.parse(requestPlaylist.getBody())
 
