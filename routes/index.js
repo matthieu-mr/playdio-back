@@ -5,9 +5,28 @@ var radioModel = require('../models/radio')
 var request = require('sync-request');
 var  btoa  = require ( 'btoa' ) ; 
 /* info compte api spotify */
+
+/* Matthieu
+  var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
+  var client_secret = '7b8f199f21fb46129da726817a65ece9'; // Your secret
+  var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
+ */
+
+/* Ben 
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
+ */
+
+/* Marion
 var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
 var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
+*/
+
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -29,6 +48,8 @@ async function refreshTokens(idSpotify) {
     { $set: {"musicAccounts.$.accessToken": newToken.access_token}}
   )
 }
+
+
 /* connection Spotify  */
 router.get('/autorisation',function(req,res,next){
 res.json({clientId : client_id,redirectURI: redirect_uri,clientSecret:client_secret})
@@ -54,7 +75,8 @@ router.post('/saveToken',async function(req,res,next){
         platfornUserID:reponse.id,
         platformURI:reponse.uri,
         refreshToken:req.body.refreshToken,
-        accessToken:req.body.accessToken
+        accessToken:req.body.accessToken,
+        namePlatform:'spotify'
       })
       await newUser.save()
       res.json({result:true,userInfo:newUser})
@@ -80,7 +102,6 @@ router.post('/saveToken',async function(req,res,next){
         },
       })
       var response = JSON.parse(requestSpotify.getBody())
-
       /* renvoi du json vers le front */
       res.json({result:response})
     });
@@ -92,23 +113,35 @@ router.post('/sign-in', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* POST sign-up */
 router.post('/sign-up', async function(req, res, next) {
-  
   var user = await userModel.find({email:req.body.email})
-  /* if(si l'utisateur n'a pas de compte musique) */
-  var newUser = await new userModel({
-    firtName: req.body.firtName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: req.body.password,
-  })
-    await newUser.save()
-    res.json({result:true,dataUser:newUser});
-  /* } */
-  res.json({result:false});
-
-  
+  if(user.length > 0){
+    await userModel.updateMany(
+      {email: req.body.email},
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: req.body.password,
+      }
+    )
+    var update = await userModel.find({email:req.body.email})
+    res.json({result:update})
+  }else{
+    var newUser = await new userModel({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+    })
+      await newUser.save()
+      res.json({result:true,dataUser:newUser});
+  }
 });
-
+/* recuperation donnée pour le sign-up */
+router.post('/infoSignUp',async function(req,res,next){
+  var user = await userModel.find({email:req.body.email})
+  res.json({infoUser:user})
+})
 /* --------------------------------------------------------- */
 /* GET home page === radio page ? */
 router.get('/', function(req, res, next) {
@@ -121,9 +154,56 @@ router.get('/', function(req, res, next) {
 router.get('/radio', function(req, res, next) {
 });
 
+
+/* --------------------------------------------------------- */
+/* GET user playlist */
+
+router.get('/user-playlist', function(req, res, next) {
+
+// Matthieu id spotify : "1127664154",
+var requestPlaylist = request('GET','https://api.spotify.com/v1/users/1127664154/playlists',{
+  headers:
+      { 'postman-token': 'b6ab1d2c-0ae3-17a4-7667-7a2282190533',
+      'cache-control': 'no-cache',
+      authorization: 'Bearer BQDnpWMVn9QQ4Ztv7qemXGRtNA1CmNp-5R6jXtUWZnUoEM4ZNfIFHrOK9qS_NKYG9dAgwwWX3qLUJ6GYFFKkT3U1WgNbcqOJWPJjUOMwJDNR8NKseDBygV_CnnRgtcQqJZB0ojfAOvW7TYcw-qMlz1Hc6jDtSscLxWvlhx0V60ivZLz7IZpeWlJk1zMNCRFPO1jzIDwcqjhDBKpuUyxjdz_wwuv_Bz7UR4xTQAot6eeM7DhSjK63N5coGweGv-SrgnE2dmr2WBAm339y',
+      'content-type': 'application/json',
+      accept: 'application/json' },
+    })
+  var response = JSON.parse(requestPlaylist.getBody())
+
+  res.json({response})
+});
+
+/* --------------------------------------------------------- */
+/* GET Spotify Search */
+
+router.post('/user-search', function(req, res, next) {
+
+  // Matthieu id spotify : "1127664154",
+
+  let title = "penitencier"
+
+  var requestPlaylist = request('GET',`https://api.spotify.com/v1/search?q=${title}&type=track`,{
+    headers:
+        { 
+        'postman-token': '7df9b449-eb44-a946-dace-115e5ca76d41',
+        'cache-control': 'no-cache',
+        authorization: 'Bearer BQCTzjW8bNy5b6mbkqGEn-XkxfCsoqH3kOCQN5mn5ID6WNUgavTUtWOvf5yrXhViFgXG92s_qqgnUsc1ALIni0fBcdm-fmb_iqnxCVJinqJ4bcIbt9MYxqycr1RDQHXi1v9RWvxC8YeToVkVuA7tsiKHBUC46Ryqm80jG20IkNkpqCOxLVLe3IFBHpBopnkIMaECiBh-3bz5MhPBYBDPtf9xn3lhrtImUPSPYJ0xXdMiJF8N-wW_ax_JozgncV1AdCF_lMcPJKArRPg_',
+        'content-type': 'application/json',
+        accept: 'application/json' },
+      })
+    var response = JSON.parse(requestPlaylist.getBody())
+    res.json({response})
+  });
+  
+
+
+
+
 /* --------------------------------------------------------- */
 /* POST radio create */
 router.post('/radio-create', function(req, res, next) {
+  
 });
 
 /* --------------------------------------------------------- */
@@ -181,6 +261,31 @@ router.get('/soudiiz', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* GET Spotify ?? */
 router.get('/spotify', function(req, res, next) {
+
+/* 
+var request = require("request");
+
+var options = { method: 'GET',
+  url: 'https://api.spotify.com/v1/search',
+  qs: { q: 'isrc:US43C1603405', type: 'track' },
+  headers: 
+   { 'postman-token': '9e48c2fd-ead6-719b-2eea-ea7dc1d59d28',
+     'cache-control': 'no-cache',
+     authorization: 'Bearer BQCK0WhEac-89R81udfmce9h_tkTHnSCm5wUuEAYRMQ90-SsQYjG0AgMiLJ6HaNwsgYQHn7_ParQFnF3TJuO6_xIJN7-2MuOGwRBIK0_dB0g12m7CxjSz5_ABbRg6KheWrBfJfeNwk9NZEVydMQeDBx0fxvVFN97PAU2hEUviWOGCCbailCUnzjq0FCt7Fzu7IkB_LkrdQgJ04pSZ-gba74XvYpLFRCvy1d5Get4yiuU5uDeqthb8SdWhkRloesHu-YGbqMbRqX5IJwY',
+     'content-type': 'application/json',
+     accept: 'application/json' } };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(error);
+
+  console.log(body);
+});
+
+
+
+*/
+
+
 });
 
 module.exports = router;
