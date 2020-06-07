@@ -158,7 +158,7 @@ router.get('/radio', function(req, res, next) {
 /* --------------------------------------------------------- */
 /* GET user playlist */
 
-router.get('/user-playlist', async function(req, res, next) {
+router.post('/user-playlist', async function(req, res, next) {
     // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
           var idSpotify = 'x7kmell0jps7njqebispe817j'
@@ -169,9 +169,10 @@ router.get('/user-playlist', async function(req, res, next) {
           const userAccessToken =  user[0].musicAccounts[0].accessToken
           /* request vers spotify */
 
-
       // Matthieu id spotify : "1127664154",
       let userIdSpotify=1127664154
+
+
 
       var requestPlaylist = request('GET',`https://api.spotify.com/v1/users/${userIdSpotify}/playlists`,{
         headers:
@@ -180,7 +181,7 @@ router.get('/user-playlist', async function(req, res, next) {
              },
           })
         var response = JSON.parse(requestPlaylist.getBody())
-
+          console.log(response)
   res.json({response})
 });
 
@@ -199,7 +200,8 @@ router.post('/user-search',async function(req, res, next) {
           const userAccessToken =  user[0].musicAccounts[0].accessToken
           /* request vers spotify */
 
-  let title = "penitencier"
+  let title = req.body.search_term
+  console.log("retour front",req.body.search_term)
 
   var requestPlaylist = request('GET',`https://api.spotify.com/v1/search?q=${title}&type=track`,{
     headers:
@@ -211,9 +213,38 @@ router.post('/user-search',async function(req, res, next) {
         accept: 'application/json' },
       })
     var response = JSON.parse(requestPlaylist.getBody())
+    console.log("retour recherche", response)
     res.json({response})
   });
   
+
+  router.post('/playlist-item',async function(req, res, next) {
+
+    // Matthieu id spotify : "1127664154",
+            /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
+            var idSpotify = 'x7kmell0jps7njqebispe817j'
+            /* function qui verrifie si le tocken access et valable */
+            await refreshTokens(idSpotify)
+            /* recuperation du token access a partir de la bdd */
+            const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
+            const userAccessToken =  user[0].musicAccounts[0].accessToken
+            /* request vers spotify */
+  
+    let playlist_id = req.body.idPlayslistSpotifyFromFront
+  
+    var requestPlaylist = request('GET',`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,{
+      headers:
+          { 
+          'postman-token': '7df9b449-eb44-a946-dace-115e5ca76d41',
+          'cache-control': 'no-cache',
+          'Authorization': 'Bearer '+userAccessToken,
+          'content-type': 'application/json',
+          accept: 'application/json' },
+        })
+      var response = JSON.parse(requestPlaylist.getBody())
+      res.json({response})
+    });
+    
 
 
 
