@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 var musicAccounts = mongoose.Schema({
     platfornUserID:String,
     platformURI:String,
+    refreshToken:String,
+    accessToken:String,
 })
 var notifications = mongoose.Schema({
     date:Date,
