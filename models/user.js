@@ -4,6 +4,7 @@ var musicAccounts = mongoose.Schema({
     platformURI:String,
     refreshToken:String,
     accessToken:String,
+    namePlatform:String,
 })
 var notifications = mongoose.Schema({
     date:Date,
