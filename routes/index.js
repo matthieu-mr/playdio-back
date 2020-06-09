@@ -15,7 +15,7 @@ var  btoa  = require ( 'btoa' ) ;
 /* Ben 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
 var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
  */
 
 /* Marion
@@ -154,7 +154,57 @@ router.get('/', function(req, res, next) {
 router.get('/radio', function(req, res, next) {
 });
 
+/* GET search user  */
+router.get('/userList',async function(req, res, next) {
+  var user = await userModel.find({firstName:req.query.firstName})
+  console.log(user)
+  res.json({userList:user})
+});
+/* GET  user list playlist  */
+router.get('/userListplaylist',async function(req, res, next) {
+  var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
+  console.log(user[0].userInfo)
+  res.json({userList:user[0].userInfo})
+});
 
+
+router.get('/updatetest',async function(req, res, next) {
+  var test = "test"
+
+  await radioModel.updateOne(
+    {name:test},
+    {$push: {"userInfo": {
+      gradeType:test,
+      like:0,
+      userID:'5eda3317a70a8042c8814473'}}}
+  )
+
+  res.json({restlu:true})
+});
+
+
+router.get('/test',async function(req, res, next) {
+  var test = "test"
+  var newRadio = await new radioModel({
+    name: test,
+    private: true,
+    link: test,
+    avatar:test,
+    livePossible:true,
+    livePlaying:true,
+  })
+  newRadio.userInfo.push({
+    gradeType:test,
+    like:0,
+    userID:'5eda54934b437a052471a86c'
+})
+  
+    await newRadio.save()
+
+
+
+  res.json({restlu:true})
+});
 /* --------------------------------------------------------- */
 /* GET user playlist */
 
@@ -178,7 +228,7 @@ router.post('/user-playlist', async function(req, res, next) {
         headers:
             {
             'Authorization': 'Bearer '+userAccessToken,
-             },
+            },
           })
         var response = JSON.parse(requestPlaylist.getBody())
           console.log(response)
