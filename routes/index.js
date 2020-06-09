@@ -32,9 +32,11 @@ var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 /* Gestion API Spotify */
 /* function pour refresh les tokens */
 async function refreshTokens(idSpotify) {
+
   const credsB64 = btoa(`${client_id}:${client_secret}`);
   const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
   const refreshToken = user[0].musicAccounts[0].refreshToken
+  
   var requestSpotify = request('POST','https://accounts.spotify.com/api/token',{
     headers:{
       'Authorization': `Basic ${credsB64}`,
@@ -43,6 +45,7 @@ async function refreshTokens(idSpotify) {
     body:`grant_type=refresh_token&refresh_token=${refreshToken}`
   })
   var newToken = JSON.parse(requestSpotify.getBody())
+  
   await userModel.updateOne(
     {musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}},
     { $set: {"musicAccounts.$.accessToken": newToken.access_token}}
@@ -181,7 +184,7 @@ router.post('/user-playlist', async function(req, res, next) {
              },
           })
         var response = JSON.parse(requestPlaylist.getBody())
-          console.log(response)
+          
   res.json({response})
 });
 
@@ -201,7 +204,7 @@ router.post('/user-search',async function(req, res, next) {
           /* request vers spotify */
 
   let title = req.body.search_term
-  console.log("retour front",req.body.search_term)
+  
 
   var requestPlaylist = request('GET',`https://api.spotify.com/v1/search?q=${title}&type=track`,{
     headers:
@@ -213,7 +216,7 @@ router.post('/user-search',async function(req, res, next) {
         accept: 'application/json' },
       })
     var response = JSON.parse(requestPlaylist.getBody())
-    console.log("retour recherche", response)
+    
     res.json({response})
   });
   
@@ -272,9 +275,69 @@ router.get('/search', function(req, res, next) {
 
 
 /* --------------------------------------------------------- */
-/* GET music play */
-router.get('/play', function(req, res, next) {
+/* POST playlist in Play screen */
+router.post('/play', async function(req, res, next) {
+
+  /* idPlaylist posted from Front */ 
+  var idPlaylist = req.body.idPlaylist;
+
+  /* idSpotify posted from Front */ 
+  var idSpotify = req.body.idSpotify;
+  await refreshTokens(idSpotify);
+
+  /* Recuperation of the access token from DB */
+  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
+  const userAccessToken =  user[0].musicAccounts[0].accessToken;
+
+  /* Spotify playlist request */
+  var requestPlaylist = request('GET',`https://api.spotify.com/v1/playlists/${idPlaylist}/tracks`,{
+    headers:
+        { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+userAccessToken
+        }
+    }
+  )
+  var response = JSON.parse(requestPlaylist.getBody())
+  res.json({response: response, userAccessToken: userAccessToken})
+
 });
+
+
+/* --------------------------------------------------------- */
+/* NOT USED FOR THE MOMENT... */
+/* GET music play */
+router.post('/play-track', async function(req, res, next) {
+  
+  /* Track href posted from Front */
+  var currentTrack = req.body.currentTrack;
+
+  /* idSpotify posted from Front */ 
+  var idSpotify = req.body.idSpotify;
+  await refreshTokens(idSpotify);
+
+  /* Recuperation of the access token from DB */
+  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
+  const userAccessToken =  user[0].musicAccounts[0].accessToken;
+
+  /* Spotify track request */
+  var requestTrack = request('GET',`${currentTrack}`,{
+    headers:
+        { 
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+userAccessToken
+        }
+    }
+  )
+  var response = JSON.parse(requestTrack.getBody());
+  var headers = JSON.parse({'Accept': 'application/json','Content-Type': 'application/json','Authorization': 'Bearer '+ userAccessToken});
+  var currentTrackParse = JSON.parse(currentTrack)
+  res.json({response: response, currentTrack: currentTrackParse, headers: headers})
+
+});
+
 
 /* --------------------------------------------------------- */
 /* GET settings */
