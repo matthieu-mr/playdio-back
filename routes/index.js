@@ -149,23 +149,55 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Playdio' });
 });
 
-/* --------------------------------------------------------- */
-/* GET radio */
-router.get('/radio', function(req, res, next) {
-});
 
 /* GET search user  */
 router.get('/userList',async function(req, res, next) {
   var user = await userModel.find({firstName:req.query.firstName})
-  console.log(user)
   res.json({userList:user})
 });
 /* GET  user list playlist  */
 router.get('/userListplaylist',async function(req, res, next) {
   var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
-  console.log(user[0].userInfo)
-  res.json({userList:user[0].userInfo})
+  res.json({userList:user[0]})
 });
+router.post('/userAdmin',async function(req, res, next) {
+  await radioModel.updateOne(
+    {name:req.body.namePlaylist,
+    userInfo:{$elemMatch:{userID: req.body.idUser}}},
+    { $set: {"userInfo.$.gradeType": req.body.gradeType}})
+  res.json({userList:true})
+});
+router.post('/deleteUser',async function(req, res, next) {
+
+  await radioModel.updateOne(
+    {name:req.body.namePlaylist},
+    {$pull:{userInfo:{$elemMatch:{_iD: req.body.idDelete}}}
+    })
+
+  res.json()
+});
+
+/* --------------------------------------------------------- */
+/* GET radio */
+router.get('/radio', function(req, res, next) {
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 router.get('/updatetest',async function(req, res, next) {
@@ -173,10 +205,11 @@ router.get('/updatetest',async function(req, res, next) {
 
   await radioModel.updateOne(
     {name:test},
-    {$push: {"userInfo": {
-      gradeType:test,
-      like:0,
-      userID:'5eda3317a70a8042c8814473'}}}
+    {$push: {"tracks": {
+      name:"Believe",
+      isrcID:"GBAHT9803002",
+      preview_url:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
+      }}}
   )
 
   res.json({restlu:true})

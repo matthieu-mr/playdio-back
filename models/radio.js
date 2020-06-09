@@ -13,6 +13,7 @@ var tracks = mongoose.Schema({
     position:Number,
     isrcID:String,
     upcID:String,
+    preview_url:String,
     userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var chat = mongoose.Schema({
