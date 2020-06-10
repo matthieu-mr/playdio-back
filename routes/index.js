@@ -157,6 +157,14 @@ router.get('/', function(req, res, next) {
 router.get('/radio', function(req, res, next) {
 });
 
+/* --------------------------------------------------------- */
+/* POST radio playlist from DB */
+router.post('/radio-playlist', async function(req, res, next) {
+  var userId = req.body.userId;
+  var radio = await radioModel.find({userInfo:{$elemMatch:{userID: userId}}})
+  res.json(radio)
+});
+
 
 /* --------------------------------------------------------- */
 /* GET user playlist */
@@ -225,7 +233,7 @@ router.post('/user-search',async function(req, res, next) {
 
     // Matthieu id spotify : "1127664154",
             /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-            var idSpotify = 'x7kmell0jps7njqebispe817j'
+            var idSpotify = '20jsoqg4lepva2a9osvyqwg1a'
             /* function qui verrifie si le tocken access et valable */
             await refreshTokens(idSpotify)
             /* recuperation du token access a partir de la bdd */
@@ -305,8 +313,9 @@ router.post('/play', async function(req, res, next) {
 });
 
 
-/* --------------------------------------------------------- */
+/* ******************************************** */
 /* NOT USED FOR THE MOMENT... */
+/* ******************************************** */
 /* GET music play */
 router.post('/play-track', async function(req, res, next) {
   
