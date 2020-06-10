@@ -218,42 +218,71 @@ router.post('/radio-playlist', async function(req, res, next) {
 
 
 router.get('/updatetest',async function(req, res, next) {
-  var test = "test"
+  var radioName = "Radio Marion"
 
   await radioModel.updateOne(
-    {name:test},
-    {$push: {"tracks": {
-      name:"Believe",
-      isrcID:"GBAHT9803002",
-      preview_url:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
-      }}}
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          platformTrackID: "",
+          name:"Believe",
+          artist:"",
+          album:"",
+          image:"",
+          length:"",
+          position:"",
+          isrcID:"GBAHT9803002",
+          upcID:"",
+          href:"",
+          externalUrl:"",
+          previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"",
+        }
+      }
+    }
   )
 
-  res.json({restlu:true})
+  res.json({result:true})
 });
 
 
+
+
 router.get('/test',async function(req, res, next) {
-  var test = "test"
+  var radioName = "Radio Marion"
   var newRadio = await new radioModel({
-    name: test,
+    name: radioName,
     private: true,
-    link: test,
-    avatar:test,
+    link: undefined,
+    avatar: undefined,
     livePossible:true,
     livePlaying:true,
   })
   newRadio.userInfo.push({
-    gradeType:test,
+    gradeType: "admin",
+    like:0,
+    userID:'5eda3317a70a8042c8814473'
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
     like:0,
     userID:'5eda54934b437a052471a86c'
-})
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
+    like:0,
+    userID:'5ee00cc69f32fc0ae27decac'
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
+    like:0,
+    userID:'5ee09f829aba3efe4b68eba4'
+  })
   
-    await newRadio.save()
+  await newRadio.save()
 
-
-
-  res.json({restlu:true})
+  res.json({result:true})
 });
 /* --------------------------------------------------------- */
 /* GET user playlist */
