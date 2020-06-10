@@ -24,9 +24,9 @@ var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
 
-var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
-var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -171,12 +171,12 @@ router.post('/userAdmin',async function(req, res, next) {
   res.json({userList:true})
 });
 router.post('/deleteUser',async function(req, res, next) {
-
-  await radioModel.updateOne(
+  
+  var test = await radioModel.updateOne(
     {name:req.body.namePlaylist},
     {$pull:{userInfo:{$elemMatch:{_iD: req.body.idDelete}}}
     })
-
+console.log(test)
   res.json()
 });
 
