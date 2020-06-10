@@ -195,7 +195,10 @@ router.get('/radio', function(req, res, next) {
 /* POST radio playlist from DB */
 router.post('/radio-playlist', async function(req, res, next) {
   var userId = req.body.userId;
-  var radio = await radioModel.find({userInfo:{$elemMatch:{userID: userId}}})
+  var radioId = req.body.radioId;
+  var radio = await radioModel.findOne({userInfo:{$elemMatch:{userID: userId}},_id: radioId})
+
+  console.log("radio",radio)
   res.json(radio)
 });
 
@@ -225,19 +228,65 @@ router.get('/updatetest',async function(req, res, next) {
     {$push: 
       {"tracks": 
         {
-          platformTrackID: "",
           name:"Believe",
-          artist:"",
-          album:"",
-          image:"",
-          length:"",
-          position:"",
+          artist:"Cher",
+          album:"Believe",
+          image:"https://i.scdn.co/image/ab67616d0000b27361c83e0a3e42be611729c840",
+          length:239026,
+          position: 1,
           isrcID:"GBAHT9803002",
-          upcID:"",
-          href:"",
-          externalUrl:"",
+          upcID:null,
+          platformTrackID:"2goLsvvODILDzeeiT4dAoR",
+          href:"https://api.spotify.com/v1/tracks/2goLsvvODILDzeeiT4dAoR",
+          externalUrl:"https://open.spotify.com/track/2goLsvvODILDzeeiT4dAoR",
           previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
-          uri:"",
+          uri:"spotify:track:2goLsvvODILDzeeiT4dAoR",
+        }
+      }
+    }
+  )
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Bohemian Rhapsody - 2011 Mix",
+          artist:"Queen",
+          album:"A Night At The Opera (2011 Remaster)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e319baafd16e84f0408af2a0",
+          length:354320,
+          position:11,
+          isrcID:"GBUM71029604",
+          upcID:null,
+          platformTrackID: "4u7EnebtmKWzUH433cf5Qv",
+          href:"https://api.spotify.com/v1/tracks/4u7EnebtmKWzUH433cf5Qv",
+          externalUrl:"https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+          previewUrl:null,
+          uri:"spotify:track:4u7EnebtmKWzUH433cf5Qv",
+        }
+      }
+    }
+  )
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Like a Virgin",
+          artist:"Madonna",
+          album:"Like a Virgin (Reissue)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e09cc42d97962159cd0ab1e6",
+          length:218626,
+          position:3,
+          isrcID:"USWB10002748",
+          upcID:null,
+          platformTrackID:"1ZPlNanZsJSPK5h9YZZFbZ",
+          href:"https://api.spotify.com/v1/tracks/1ZPlNanZsJSPK5h9YZZFbZ",
+          externalUrl:"https://open.spotify.com/track/1ZPlNanZsJSPK5h9YZZFbZ",
+          previewUrl:"https://p.scdn.co/mp3-preview/693e9d74bf04462da738351385fdc225cc465edc?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"spotify:track:1ZPlNanZsJSPK5h9YZZFbZ",
         }
       }
     }
