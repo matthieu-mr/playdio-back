@@ -193,28 +193,12 @@ router.post('/radio-playlist', async function(req, res, next) {
   var userId = req.body.userId;
   var radioId = req.body.radioId;
   var radio = await radioModel.findOne({userInfo:{$elemMatch:{userID: userId}},_id: radioId})
-
-  // console.log("radio",radio)
   res.json(radio)
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* --------------------------------------------------------- */
+/* GET test ajout de radio */
 
 router.get('/updatetest',async function(req, res, next) {
   var radioName = "Radio Marion"
@@ -232,7 +216,7 @@ router.get('/updatetest',async function(req, res, next) {
           position: 1,
           isrcID:"GBAHT9803002",
           upcID:null,
-          platformTrackID:"2goLsvvODILDzeeiT4dAoR",
+          spotifyId:"2goLsvvODILDzeeiT4dAoR",
           href:"https://api.spotify.com/v1/tracks/2goLsvvODILDzeeiT4dAoR",
           externalUrl:"https://open.spotify.com/track/2goLsvvODILDzeeiT4dAoR",
           previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
@@ -255,7 +239,7 @@ router.get('/updatetest',async function(req, res, next) {
           position:11,
           isrcID:"GBUM71029604",
           upcID:null,
-          platformTrackID: "4u7EnebtmKWzUH433cf5Qv",
+          spotifyId: "4u7EnebtmKWzUH433cf5Qv",
           href:"https://api.spotify.com/v1/tracks/4u7EnebtmKWzUH433cf5Qv",
           externalUrl:"https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
           previewUrl:null,
@@ -278,7 +262,7 @@ router.get('/updatetest',async function(req, res, next) {
           position:3,
           isrcID:"USWB10002748",
           upcID:null,
-          platformTrackID:"1ZPlNanZsJSPK5h9YZZFbZ",
+          spotifyId:"1ZPlNanZsJSPK5h9YZZFbZ",
           href:"https://api.spotify.com/v1/tracks/1ZPlNanZsJSPK5h9YZZFbZ",
           externalUrl:"https://open.spotify.com/track/1ZPlNanZsJSPK5h9YZZFbZ",
           previewUrl:"https://p.scdn.co/mp3-preview/693e9d74bf04462da738351385fdc225cc465edc?cid=774b29d4f13844c495f206cafdad9c86",
@@ -491,13 +475,18 @@ router.get('/search', function(req, res, next) {
 /* POST playlist in Play screen */
 router.post('/play', async function(req, res, next) {
 
+
+
+
+
+  
+
+
   /* idPlaylist posted from Front */ 
   var idPlaylist = req.body.idPlaylist;
-
   /* idSpotify posted from Front */ 
   var idSpotify = req.body.idSpotify;
   await refreshTokens(idSpotify);
-
   /* Recuperation of the access token from DB */
   const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
   const userAccessToken =  user[0].musicAccounts[0].accessToken;
@@ -517,40 +506,6 @@ router.post('/play', async function(req, res, next) {
 
 });
 
-
-/* ******************************************** */
-/* NOT USED FOR THE MOMENT... */
-/* ******************************************** */
-/* GET music play */
-router.post('/play-track', async function(req, res, next) {
-  
-  /* Track href posted from Front */
-  var currentTrack = req.body.currentTrack;
-
-  /* idSpotify posted from Front */ 
-  var idSpotify = req.body.idSpotify;
-  await refreshTokens(idSpotify);
-
-  /* Recuperation of the access token from DB */
-  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
-  const userAccessToken =  user[0].musicAccounts[0].accessToken;
-
-  /* Spotify track request */
-  var requestTrack = request('GET',`${currentTrack}`,{
-    headers:
-        { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+userAccessToken
-        }
-    }
-  )
-  var response = JSON.parse(requestTrack.getBody());
-  var headers = JSON.parse({'Accept': 'application/json','Content-Type': 'application/json','Authorization': 'Bearer '+ userAccessToken});
-  var currentTrackParse = JSON.parse(currentTrack)
-  res.json({response: response, currentTrack: currentTrackParse, headers: headers})
-
-});
 
 
 /* --------------------------------------------------------- */
