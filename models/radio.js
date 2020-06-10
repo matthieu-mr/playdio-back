@@ -9,11 +9,16 @@ var tracks = mongoose.Schema({
     platformTrackID:String,
     name:String,
     artist:String,
-    lenght:Number,
+    album:String,
+    image:String,
+    length:Number,
     position:Number,
     isrcID:String,
     upcID:String,
-    preview_url:String,
+    href: String,
+    externalUrl: String,
+    previewUrl:String,
+    uri: String,
     userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var chat = mongoose.Schema({

@@ -4,10 +4,16 @@ var userModel = require('../models/user')
 var radioModel = require('../models/radio')
 var request = require('sync-request');
 var  btoa  = require ( 'btoa' ) ; 
+const variables = require ('../variables');
+
+const client_id = variables.client_id;
+const client_secret = variables.client_secret;
+const redirect_uri = variables.redirect_uri;
+
 /* info compte api spotify */
-var client_id = '8dbe43696ee2473581711c4f408ada5a'; // Your client id
-var client_secret = 'c904a6b2fc1146308341ea778c5a65da'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@dimox/Playdio'; // Your redirect uri
+// var client_id = '8dbe43696ee2473581711c4f408ada5a'; // Your client id
+// var client_secret = 'c904a6b2fc1146308341ea778c5a65da'; // Your secret
+// var redirect_uri = 'https://auth.expo.io/@dimox/Playdio'; // Your redirect uri
 
 /* Matthieu
   var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
@@ -26,6 +32,10 @@ var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
 var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
+
+// var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+// var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+// var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -182,6 +192,14 @@ console.log(test)
 /* --------------------------------------------------------- */
 /* GET radio */
 router.get('/radio', function(req, res, next) {
+});
+
+/* --------------------------------------------------------- */
+/* POST radio playlist from DB */
+router.post('/radio-playlist', async function(req, res, next) {
+  var userId = req.body.userId;
+  var radio = await radioModel.find({userInfo:{$elemMatch:{userID: userId}}})
+  res.json(radio)
 });
 
 
@@ -387,8 +405,9 @@ router.post('/play', async function(req, res, next) {
 });
 
 
-/* --------------------------------------------------------- */
+/* ******************************************** */
 /* NOT USED FOR THE MOMENT... */
+/* ******************************************** */
 /* GET music play */
 router.post('/play-track', async function(req, res, next) {
   
