@@ -3,22 +3,23 @@ const mongoose = require('mongoose')
 var userInfo = mongoose.Schema({
     gradeType:String,
     like:Number,
-    userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
+    userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var tracks = mongoose.Schema({
     platformTrackID:String,
     name:String,
     artist:String,
-    lenghth:Number,
+    lenght:Number,
     position:Number,
     isrcID:String,
     upcID:String,
-    userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
+    preview_url:String,
+    userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var chat = mongoose.Schema({
     time:Date,
     text:String,
-    userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
+    userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 const radioSchema = mongoose.Schema({
     name: String,

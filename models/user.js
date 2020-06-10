@@ -11,7 +11,7 @@ var notifications = mongoose.Schema({
     content:String,
     type:String,
     newField:String,
-    userID:[{type:mongoose.Schema.Types.ObjectId, ref:'user'}]
+    userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var preferences = mongoose.Schema({
     sound:String,
