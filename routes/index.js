@@ -12,11 +12,11 @@ const redirect_uri = variables.redirect_uri;
 
 /* info compte api spotify */
 
-/* Matthieu
+// Matthieu
   var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
   var client_secret = '7b8f199f21fb46129da726817a65ece9'; // Your secret
   var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
- */
+
 
 /* Ben 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
@@ -30,10 +30,17 @@ var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
 
+<<<<<<< HEAD
 // var client_id = '1284402592a548409fd7d00216992891'; // Your client id
 // var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
 // var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
 
+=======
+/* var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
+ */
+>>>>>>> reqokback
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
 /* function pour refresh les tokens */
@@ -339,7 +346,7 @@ router.get('/test',async function(req, res, next) {
 router.post('/user-playlist', async function(req, res, next) {
     // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = '1127664154'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -370,7 +377,7 @@ router.post('/user-search',async function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = '1127664154'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -400,7 +407,11 @@ router.post('/user-search',async function(req, res, next) {
 
     // Matthieu id spotify : "1127664154",
             /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
+<<<<<<< HEAD
             var idSpotify = '20jsoqg4lepva2a9osvyqwg1a'
+=======
+            var idSpotify = '1127664154'
+>>>>>>> reqokback
             /* function qui verrifie si le tocken access et valable */
             await refreshTokens(idSpotify)
             /* recuperation du token access a partir de la bdd */
@@ -419,6 +430,8 @@ router.post('/user-search',async function(req, res, next) {
           'content-type': 'application/json',
           accept: 'application/json' },
         })
+      console.log(JSON.parse(requestPlaylist))
+
       var response = JSON.parse(requestPlaylist.getBody())
       res.json({response})
     });
@@ -429,9 +442,49 @@ router.post('/user-search',async function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* POST radio create */
-router.post('/radio-create', function(req, res, next) {
-  
+router.post('/radio-create',async function(req, res, next) {
+
+//console.log("recup du back", req.body.infoplaylist)
+let data = req.body.resultat
+
+let datatDecoded = decodeURIComponent(data)
+let dataResult = JSON.parse(datatDecoded)
+console.log("retour json ----------", dataResult.listMusic)
+
+
+
+var test = "test"
+var newRadio = await new radioModel({
+  name: dataResult.name,
+  private: dataResult.isPrivate,
+  link: test,
+  avatar:test,
+  livePossible:true,
+  livePlaying:dataResult.isPlayingOnly,
+})
+
+newRadio.tracks.push(dataResult.listMusic[0])
+
+ await newRadio.save()
+
+
+
+res.json({restlu:true})
+
+
+
+
+console.log(dataResult.name)
+
+//  console.log("retour 2 data",dataResult);
+
+res.json({response:"ok back"})
+
 });
+
+
+
+
 
 /* --------------------------------------------------------- */
 /* PUT radio update */
