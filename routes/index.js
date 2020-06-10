@@ -246,7 +246,7 @@ router.get('/test',async function(req, res, next) {
 router.post('/user-playlist', async function(req, res, next) {
     // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = 'dimdimou'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -255,7 +255,7 @@ router.post('/user-playlist', async function(req, res, next) {
           /* request vers spotify */
 
       // Matthieu id spotify : "1127664154",
-      let userIdSpotify="dimdimou"
+      let userIdSpotify=1127664154
 
 
 
@@ -277,7 +277,7 @@ router.post('/user-search',async function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = 'dimdimou'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -307,7 +307,7 @@ router.post('/user-search',async function(req, res, next) {
 
     // Matthieu id spotify : "1127664154",
             /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-            var idSpotify = 'x7kmell0jps7njqebispe817j'
+            var idSpotify = 'dimdimou'
             /* function qui verrifie si le tocken access et valable */
             await refreshTokens(idSpotify)
             /* recuperation du token access a partir de la bdd */
@@ -440,7 +440,7 @@ router.post('/spotify-isrc', async function(req, res, next) {
 
   let isrc = "US43C1603405"
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = 'dimdimou'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
