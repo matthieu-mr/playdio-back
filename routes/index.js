@@ -15,7 +15,7 @@ var  btoa  = require ( 'btoa' ) ;
 /* Ben 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
 var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
  */
 
 /* Marion
@@ -24,9 +24,9 @@ var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
 
-var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
-var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
+var client_id = '1284402592a548409fd7d00216992891'; // Your client id
+var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
+var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -152,6 +152,34 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Playdio' });
 });
 
+
+/* GET search user  */
+router.get('/userList',async function(req, res, next) {
+  var user = await userModel.find({firstName:req.query.firstName})
+  res.json({userList:user})
+});
+/* GET  user list playlist  */
+router.get('/userListplaylist',async function(req, res, next) {
+  var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
+  res.json({userList:user[0]})
+});
+router.post('/userAdmin',async function(req, res, next) {
+  await radioModel.updateOne(
+    {name:req.body.namePlaylist,
+    userInfo:{$elemMatch:{userID: req.body.idUser}}},
+    { $set: {"userInfo.$.gradeType": req.body.gradeType}})
+  res.json({userList:true})
+});
+router.post('/deleteUser',async function(req, res, next) {
+  
+  var test = await radioModel.updateOne(
+    {name:req.body.namePlaylist},
+    {$pull:{userInfo:{$elemMatch:{_iD: req.body.idDelete}}}
+    })
+console.log(test)
+  res.json()
+});
+
 /* --------------------------------------------------------- */
 /* GET radio */
 router.get('/radio', function(req, res, next) {
@@ -166,6 +194,61 @@ router.post('/radio-playlist', async function(req, res, next) {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get('/updatetest',async function(req, res, next) {
+  var test = "test"
+
+  await radioModel.updateOne(
+    {name:test},
+    {$push: {"tracks": {
+      name:"Believe",
+      isrcID:"GBAHT9803002",
+      preview_url:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
+      }}}
+  )
+
+  res.json({restlu:true})
+});
+
+
+router.get('/test',async function(req, res, next) {
+  var test = "test"
+  var newRadio = await new radioModel({
+    name: test,
+    private: true,
+    link: test,
+    avatar:test,
+    livePossible:true,
+    livePlaying:true,
+  })
+  newRadio.userInfo.push({
+    gradeType:test,
+    like:0,
+    userID:'5eda54934b437a052471a86c'
+})
+  
+    await newRadio.save()
+
+
+
+  res.json({restlu:true})
+});
 /* --------------------------------------------------------- */
 /* GET user playlist */
 
@@ -189,7 +272,7 @@ router.post('/user-playlist', async function(req, res, next) {
         headers:
             {
             'Authorization': 'Bearer '+userAccessToken,
-             },
+            },
           })
         var response = JSON.parse(requestPlaylist.getBody())
           
