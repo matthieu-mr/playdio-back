@@ -171,12 +171,10 @@ router.post('/userAdmin',async function(req, res, next) {
   res.json({userList:true})
 });
 router.post('/deleteUser',async function(req, res, next) {
-  
-  var test = await radioModel.updateOne(
+  var test = await radioModel.update(
     {name:req.body.namePlaylist},
-    {$pull:{userInfo:{$elemMatch:{_iD: req.body.idDelete}}}
-    })
-console.log(test)
+    {$pull:{userInfo:{_id:req.body.idDelete}}}
+    )
   res.json()
 });
 
