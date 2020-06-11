@@ -159,11 +159,16 @@ router.get('/', function(req, res, next) {
 router.post('/userList',async function(req, res, next) {
   var regex = new RegExp('^'+req.body.firstName+'.*','i')
   var search = await userModel.find({firstName:{$regex: regex}})
-  console.log(search)
+/*   var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
+  console.log("user[0].userInfo",user[0].userInfo[0].userID.firstName)
+  console.log("search",search[0].firstName)
+  search = search.filter(elem=>elem._id!=user[0].userInfo[0].userID._id) */
   res.json({userList:search})
 });
 /* GET  user list playlist  */
-router.get('/userListplaylist',async function(req, res, next) {
+router.post('/userListplaylist',async function(req, res, next) {
+  /* _id:req.body.playlistID */
+  console.log(req.body.playlistID)
   var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
   res.json({userList:user[0]})
 });
@@ -175,10 +180,25 @@ router.post('/userAdmin',async function(req, res, next) {
   res.json({userList:true})
 });
 router.post('/deleteUser',async function(req, res, next) {
-  var test = await radioModel.update(
+  var deleteUser = await radioModel.update(
     {name:req.body.namePlaylist},
     {$pull:{userInfo:{_id:req.body.idDelete}}}
     )
+  res.json()
+});
+router.post('/addUser',async function(req, res, next) {
+  console.log(req.body.playlistId)
+
+  var addUser = await radioModel.updateOne(
+    {_id:req.body.playlistId},
+    { $push: {"userInfo":
+              {
+                userID:req.body.idUser,
+                like:0,
+                gradeType:"public"
+              }}}
+    )
+    console.log(addUser)
   res.json()
 });
 
