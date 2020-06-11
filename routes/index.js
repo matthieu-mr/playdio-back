@@ -312,9 +312,11 @@ var idSpotifyFromBase = await userModel.findOne(
 let data = req.body.resultat
 let datatDecoded = decodeURIComponent(data)
 let dataResult = JSON.parse(datatDecoded)
-console.log("retour json ----------", dataResult)
+
 
 let test ="stringAafficher";
+let name = dataResult.name
+
 
   var newRadio = await new radioModel({
     name: dataResult.name,
@@ -329,10 +331,16 @@ let test ="stringAafficher";
         like:0,
         userID:idSpotifyFromBase._id
       })
+  
 await newRadio.save()
 
-res.json({result:true})
 
+var idRadio = await radioModel.findOne(
+  { name: name}, {userInfo:{$elemMatch:{userID: idSpotifyFromBase._id}}}
+  )
+console.log("id radio --------->",idRadio._id)
+
+res.json({result:true,idRadio:idRadio._id})
 
 
 
