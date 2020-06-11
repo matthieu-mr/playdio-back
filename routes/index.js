@@ -160,9 +160,11 @@ router.get('/', function(req, res, next) {
 
 
 /* GET search user  */
-router.get('/userList',async function(req, res, next) {
-  var user = await userModel.find({firstName:req.query.firstName})
-  res.json({userList:user})
+router.post('/userList',async function(req, res, next) {
+  var regex = new RegExp('^'+req.body.firstName+'.*','i')
+  var search = await userModel.find({firstName:{$regex: regex}})
+  console.log(search)
+  res.json({userList:search})
 });
 /* GET  user list playlist  */
 router.get('/userListplaylist',async function(req, res, next) {
