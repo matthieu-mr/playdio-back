@@ -91,12 +91,9 @@ router.post('/sign-in',async function(req, res, next) {
     
     if(user){
       result = true
-      console.log("user connected")
     } else {
       error.push('email ou mot de passe incorrect')
-      console.log("invalid credentials")
     }
-    console.log(user)
     res.json({result, user, error})
   }
 
@@ -158,7 +155,6 @@ router.post('/userList',async function(req, res, next) {
 router.post('/userListplaylist',async function(req, res, next) {
 
   var user = await radioModel.find({_id:req.body.playlistID}).populate("userInfo.userID").exec()
-  console.log(user)
   res.json({userList:user[0]})
 });
 router.post('/userAdmin',async function(req, res, next) {
@@ -176,7 +172,6 @@ router.post('/deleteUser',async function(req, res, next) {
   res.json()
 });
 router.post('/addUser',async function(req, res, next) {
-  console.log(req.body.playlistId)
 
   var addUser = await radioModel.updateOne(
     {_id:req.body.playlistId},
@@ -187,7 +182,6 @@ router.post('/addUser',async function(req, res, next) {
                 gradeType:"public"
               }}}
     )
-    console.log(addUser)
   res.json()
 });
 
@@ -229,7 +223,6 @@ router.post('/user-playlist', async function(req, res, next) {
 
       // Matthieu id spotify : "1127664154",
       let userIdSpotify=req.body.idSpotify
-      console.log("recup from front",req.body.idSpotify)
 
 
 
