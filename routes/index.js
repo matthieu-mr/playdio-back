@@ -98,7 +98,7 @@ router.post('/saveToken',async function(req,res,next){
     /* example de request spotify */
     router.get('/exempleRequest',async function(req, res, next) {
       /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-      var idSpotify = 'x7kmell0jps7njqebispe817j'
+      var idSpotify = 'dimdimou'
       /* info dynamique que la requette a besoin */
       var artist = "Audioslave"
       var typeInfo = "track"
@@ -119,7 +119,35 @@ router.post('/saveToken',async function(req,res,next){
     });
 /* --------------------------------------------------------- */
 /* POST sign-in */
-router.post('/sign-in', function(req, res, next) {
+router.post('/sign-in',async function(req, res, next) {
+  var result = false
+  var user = null
+  var error = []
+  
+  if(req.body.emailFromFront == ''
+  || req.body.passwordFromFront == ''
+  ){
+    error.push('champs vides')
+  }
+
+  if(error.length == 0){
+    const user = await userModel.findOne({
+      email: req.body.emailFromFront,
+      password: req.body.passwordFromFront
+    })
+  
+    
+    if(user){
+      result = true
+      console.log("user connected")
+    } else {
+      error.push('email ou mot de passe incorrect')
+      console.log("invalid credentials")
+    }
+  }
+  
+
+  res.json({result, user, error})
 });
 
 /* --------------------------------------------------------- */
