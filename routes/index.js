@@ -310,7 +310,7 @@ let data = req.body.resultat
 let datatDecoded = decodeURIComponent(data)
 let dataResult = JSON.parse(datatDecoded)
 
-
+console.log("dataResult : ",dataResult)
 var idSpotifyFromBase = await userModel.findOne(
   { email: dataResult.infoUser.email }
   )
