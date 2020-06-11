@@ -10,28 +10,6 @@ const client_id = variables.client_id;
 const client_secret = variables.client_secret;
 const redirect_uri = variables.redirect_uri;
 
-/* info compte api spotify */
-// var client_id = '8dbe43696ee2473581711c4f408ada5a'; // Your client id
-// var client_secret = 'c904a6b2fc1146308341ea778c5a65da'; // Your secret
-// var redirect_uri = 'https://auth.expo.io/@dimox/Playdio'; // Your redirect uri
-
-/* Matthieu
-  var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
-  var client_secret = '7b8f199f21fb46129da726817a65ece9'; // Your secret
-  var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
-*/
-
-/* Ben 
-var client_id = '1284402592a548409fd7d00216992891'; // Your client id
-var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
- */
-
-/* Marion
-var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
-var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
-var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
-*/
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -91,28 +69,7 @@ router.post('/saveToken',async function(req,res,next){
     }
   }) 
   
-    /* example de request spotify */
-    router.get('/exempleRequest',async function(req, res, next) {
-      /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-      var idSpotify = 'dimdimou'
-      /* info dynamique que la requette a besoin */
-      var artist = "Audioslave"
-      var typeInfo = "track"
-      /* function qui verrifie si le tocken access et valable */
-      await refreshTokens(idSpotify)
-      /* recuperation du token access a partir de la bdd */
-      const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
-      const userAccessToken =  user[0].musicAccounts[0].accessToken
-      /* request vers spotify */
-      var requestSpotify = request('GET','https://api.spotify.com/v1/search?q='+artist+'&type='+typeInfo,{
-        headers:{
-          'Authorization': 'Bearer '+userAccessToken,
-        },
-      })
-      var response = JSON.parse(requestSpotify.getBody())
-      /* renvoi du json vers le front */
-      res.json({result:response})
-    });
+
 /* --------------------------------------------------------- */
 /* POST sign-in */
 router.post('/sign-in',async function(req, res, next) {
@@ -240,8 +197,6 @@ router.post('/radio', async function(req, res, next) {
   var discoverRadio = await radioModel.find();
   var myRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType:"composer"}}});
   var communityRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType: "bandmaster"||"public"}}});
-  
-  console.log("discoverRadio /radio", discoverRadio)
   res.json({discoverRadio, myRadio, communityRadio})
 });
 
@@ -251,127 +206,12 @@ router.post('/radio', async function(req, res, next) {
 router.post('/radio-playlist', async function(req, res, next) {
   var userId = req.body.userId;
   var radioId = req.body.radioId;
-  var radio = await radioModel.findOne({userInfo:{$elemMatch:{userID: userId}},_id: radioId})
+  var radio = await radioModel.findOne({_id: radioId})
   res.json(radio)
 });
 
 
-/* --------------------------------------------------------- */
-/* GET test ajout de radio */
 
-router.get('/updatetest',async function(req, res, next) {
-  var radioName = "Radio Marion"
-
-  await radioModel.updateOne(
-    {name:radioName},
-    {$push: 
-      {"tracks": 
-        {
-          name:"Believe",
-          artist:"Cher",
-          album:"Believe",
-          image:"https://i.scdn.co/image/ab67616d0000b27361c83e0a3e42be611729c840",
-          length:239026,
-          position: 1,
-          isrcID:"GBAHT9803002",
-          upcID:null,
-          spotifyId:"2goLsvvODILDzeeiT4dAoR",
-          href:"https://api.spotify.com/v1/tracks/2goLsvvODILDzeeiT4dAoR",
-          externalUrl:"https://open.spotify.com/track/2goLsvvODILDzeeiT4dAoR",
-          previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
-          uri:"spotify:track:2goLsvvODILDzeeiT4dAoR",
-        }
-      }
-    }
-  )
-
-  await radioModel.updateOne(
-    {name:radioName},
-    {$push: 
-      {"tracks": 
-        {
-          name:"Bohemian Rhapsody - 2011 Mix",
-          artist:"Queen",
-          album:"A Night At The Opera (2011 Remaster)",
-          image:"https://i.scdn.co/image/ab67616d0000b273e319baafd16e84f0408af2a0",
-          length:354320,
-          position:11,
-          isrcID:"GBUM71029604",
-          upcID:null,
-          spotifyId: "4u7EnebtmKWzUH433cf5Qv",
-          href:"https://api.spotify.com/v1/tracks/4u7EnebtmKWzUH433cf5Qv",
-          externalUrl:"https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
-          previewUrl:null,
-          uri:"spotify:track:4u7EnebtmKWzUH433cf5Qv",
-        }
-      }
-    }
-  )
-
-  await radioModel.updateOne(
-    {name:radioName},
-    {$push: 
-      {"tracks": 
-        {
-          name:"Like a Virgin",
-          artist:"Madonna",
-          album:"Like a Virgin (Reissue)",
-          image:"https://i.scdn.co/image/ab67616d0000b273e09cc42d97962159cd0ab1e6",
-          length:218626,
-          position:3,
-          isrcID:"USWB10002748",
-          upcID:null,
-          spotifyId:"1ZPlNanZsJSPK5h9YZZFbZ",
-          href:"https://api.spotify.com/v1/tracks/1ZPlNanZsJSPK5h9YZZFbZ",
-          externalUrl:"https://open.spotify.com/track/1ZPlNanZsJSPK5h9YZZFbZ",
-          previewUrl:"https://p.scdn.co/mp3-preview/693e9d74bf04462da738351385fdc225cc465edc?cid=774b29d4f13844c495f206cafdad9c86",
-          uri:"spotify:track:1ZPlNanZsJSPK5h9YZZFbZ",
-        }
-      }
-    }
-  )
-
-  res.json({result:true})
-});
-
-
-
-
-router.get('/test',async function(req, res, next) {
-  var newRadio = await new radioModel({
-    name: "Radio Rock Metal",
-    private: true,
-    link: "",
-    avatar: "http://www.sickandsound.it/wp-content/uploads/2017/10/Rock-and-metal-in-2018.jpg",
-    tags: ["ROCK","METAL"],
-    livePossible:true,
-    livePlaying:true,
-  })
-  newRadio.userInfo.push({
-    gradeType: "bandmaster",
-    like:0,
-    userID:'5eda3317a70a8042c8814473'
-  })
-  newRadio.userInfo.push({
-    gradeType:"bandmaster",
-    like:0,
-    userID:'5eda54934b437a052471a86c'
-  })
-  newRadio.userInfo.push({
-    gradeType:"composer",
-    like:0,
-    userID:'5ee00cc69f32fc0ae27decac'
-  })
-  newRadio.userInfo.push({
-    gradeType:"bandmaster",
-    like:0,
-    userID:'5ee09f829aba3efe4b68eba4'
-  })
-  
-  await newRadio.save()
-
-  res.json({result:true})
-});
 /* --------------------------------------------------------- */
 /* GET user playlist */
 
@@ -604,3 +444,149 @@ router.post('/spotify-isrc', async function(req, res, next) {
 });
 
 module.exports = router;
+
+// ********************************************************************
+// TESTS
+// ********************************************************************
+
+
+/* --------------------------------------------------------- */
+/* GET test maj de radio */
+
+router.get('/test-update-radio',async function(req, res, next) {
+  var radioName = "Radio Marion"
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Believe",
+          artist:"Cher",
+          album:"Believe",
+          image:"https://i.scdn.co/image/ab67616d0000b27361c83e0a3e42be611729c840",
+          length:239026,
+          position: 1,
+          isrcID:"GBAHT9803002",
+          upcID:null,
+          spotifyId:"2goLsvvODILDzeeiT4dAoR",
+          href:"https://api.spotify.com/v1/tracks/2goLsvvODILDzeeiT4dAoR",
+          externalUrl:"https://open.spotify.com/track/2goLsvvODILDzeeiT4dAoR",
+          previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"spotify:track:2goLsvvODILDzeeiT4dAoR",
+        }
+      }
+    }
+  )
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Bohemian Rhapsody - 2011 Mix",
+          artist:"Queen",
+          album:"A Night At The Opera (2011 Remaster)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e319baafd16e84f0408af2a0",
+          length:354320,
+          position:11,
+          isrcID:"GBUM71029604",
+          upcID:null,
+          spotifyId: "4u7EnebtmKWzUH433cf5Qv",
+          href:"https://api.spotify.com/v1/tracks/4u7EnebtmKWzUH433cf5Qv",
+          externalUrl:"https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+          previewUrl:null,
+          uri:"spotify:track:4u7EnebtmKWzUH433cf5Qv",
+        }
+      }
+    }
+  )
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Like a Virgin",
+          artist:"Madonna",
+          album:"Like a Virgin (Reissue)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e09cc42d97962159cd0ab1e6",
+          length:218626,
+          position:3,
+          isrcID:"USWB10002748",
+          upcID:null,
+          spotifyId:"1ZPlNanZsJSPK5h9YZZFbZ",
+          href:"https://api.spotify.com/v1/tracks/1ZPlNanZsJSPK5h9YZZFbZ",
+          externalUrl:"https://open.spotify.com/track/1ZPlNanZsJSPK5h9YZZFbZ",
+          previewUrl:"https://p.scdn.co/mp3-preview/693e9d74bf04462da738351385fdc225cc465edc?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"spotify:track:1ZPlNanZsJSPK5h9YZZFbZ",
+        }
+      }
+    }
+  )
+
+  res.json({result:true})
+});
+
+
+/* GET test ajout de radio */
+
+router.get('/test-radio-creation',async function(req, res, next) {
+  var newRadio = await new radioModel({
+    name: "Radio Rock Metal",
+    private: true,
+    link: "",
+    avatar: "http://www.sickandsound.it/wp-content/uploads/2017/10/Rock-and-metal-in-2018.jpg",
+    tags: ["ROCK","METAL"],
+    livePossible:true,
+    livePlaying:true,
+  })
+  newRadio.userInfo.push({
+    gradeType: "bandmaster",
+    like:0,
+    userID:'5eda3317a70a8042c8814473'
+  })
+  newRadio.userInfo.push({
+    gradeType:"bandmaster",
+    like:0,
+    userID:'5eda54934b437a052471a86c'
+  })
+  newRadio.userInfo.push({
+    gradeType:"composer",
+    like:0,
+    userID:'5ee00cc69f32fc0ae27decac'
+  })
+  newRadio.userInfo.push({
+    gradeType:"bandmaster",
+    like:0,
+    userID:'5ee09f829aba3efe4b68eba4'
+  })
+  
+  await newRadio.save()
+
+  res.json({result:true})
+});
+
+/* example de request spotify */
+
+router.get('/exempleRequest',async function(req, res, next) {
+  /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
+  var idSpotify = 'dimdimou'
+  /* info dynamique que la requette a besoin */
+  var artist = "Audioslave"
+  var typeInfo = "track"
+  /* function qui verrifie si le tocken access et valable */
+  await refreshTokens(idSpotify)
+  /* recuperation du token access a partir de la bdd */
+  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
+  const userAccessToken =  user[0].musicAccounts[0].accessToken
+  /* request vers spotify */
+  var requestSpotify = request('GET','https://api.spotify.com/v1/search?q='+artist+'&type='+typeInfo,{
+    headers:{
+      'Authorization': 'Bearer '+userAccessToken,
+    },
+  })
+  var response = JSON.parse(requestSpotify.getBody())
+  /* renvoi du json vers le front */
+  res.json({result:response})
+});
