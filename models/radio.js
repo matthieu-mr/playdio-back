@@ -6,7 +6,7 @@ var userInfo = mongoose.Schema({
     userID:{type:mongoose.Schema.Types.ObjectId, ref:'user'}
 })
 var tracks = mongoose.Schema({
-    platformTrackID:String,
+    spotifyId:String,
     name:String,
     artist:String,
     album:String,
