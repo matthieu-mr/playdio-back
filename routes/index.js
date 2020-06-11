@@ -303,9 +303,6 @@ router.post('/radio-create',async function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
 
-var idSpotifyFromBase = await userModel.findOne(
-  { email: "m.michon@yahoo.fr" }
-  )
 
 
 //console.log("recup du back", req.body.infoplaylist)
@@ -313,6 +310,13 @@ let data = req.body.resultat
 let datatDecoded = decodeURIComponent(data)
 let dataResult = JSON.parse(datatDecoded)
 
+
+var idSpotifyFromBase = await userModel.findOne(
+  { email: dataResult.infoUser.email }
+  )
+
+
+console.log("result body ----",dataResult.listMusic[0].image)
 
 let test ="stringAafficher";
 let name = dataResult.name
@@ -322,17 +326,17 @@ let name = dataResult.name
     name: dataResult.name,
     private: dataResult.isPrivate,
     link: test,
-    avatar:test,
+    avatar:dataResult.listMusic[0].image,
     livePossible:true,
     tracks:dataResult.listMusic, 
   })
       newRadio.userInfo.push({
-        gradeType: "bandmaster",
+        gradeType: "composer",
         like:0,
         userID:idSpotifyFromBase._id
       })
   
-await newRadio.save()
+ await newRadio.save()
 
 
 var idRadio = await radioModel.findOne(
