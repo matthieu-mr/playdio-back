@@ -307,32 +307,37 @@ router.post('/user-search',async function(req, res, next) {
 /* POST radio create */
 router.post('/radio-create',async function(req, res, next) {
 
+  // Matthieu id spotify : "1127664154",
+
+var idSpotifyFromBase = await userModel.findOne(
+  { email: "m.michon@yahoo.fr" }
+  )
+
+
 //console.log("recup du back", req.body.infoplaylist)
 let data = req.body.resultat
-
 let datatDecoded = decodeURIComponent(data)
 let dataResult = JSON.parse(datatDecoded)
-console.log("retour json ----------", dataResult.listMusic)
+console.log("retour json ----------", dataResult)
 
+let test ="stringAafficher";
 
+  var newRadio = await new radioModel({
+    name: dataResult.name,
+    private: dataResult.isPrivate,
+    link: test,
+    avatar:test,
+    livePossible:true,
+    tracks:dataResult.listMusic, 
+  })
+      newRadio.userInfo.push({
+        gradeType: "bandmaster",
+        like:0,
+        userID:idSpotifyFromBase._id
+      })
+await newRadio.save()
 
-var test = "test"
-var newRadio = await new radioModel({
-  name: dataResult.name,
-  private: dataResult.isPrivate,
-  link: test,
-  avatar:test,
-  livePossible:true,
-  livePlaying:dataResult.isPlayingOnly,
-})
-
-newRadio.tracks.push(dataResult.listMusic[0])
-
- await newRadio.save()
-
-
-
-res.json({restlu:true})
+res.json({result:true})
 
 
 
