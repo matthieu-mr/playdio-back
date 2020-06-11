@@ -131,7 +131,6 @@ router.post('/sign-in',async function(req, res, next) {
       email: req.body.emailFromFront,
       password: req.body.passwordFromFront
     })
-  
     
     if(user){
       result = true
@@ -140,10 +139,12 @@ router.post('/sign-in',async function(req, res, next) {
       error.push('email ou mot de passe incorrect')
       console.log("invalid credentials")
     }
+    console.log(user)
+    res.json({result, user, error})
   }
-  
 
-  res.json({result, user, error})
+
+  
 });
 
 /* --------------------------------------------------------- */

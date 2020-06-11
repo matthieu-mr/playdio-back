@@ -1,6 +1,6 @@
-const client_id = '1284402592a548409fd7d00216992891'; // Your client id
-const client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-const redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect uri
+const client_id = '8dbe43696ee2473581711c4f408ada5a'; // Your client id
+const client_secret = 'c904a6b2fc1146308341ea778c5a65da'; // Your secret
+const redirect_uri = 'https://auth.expo.io/@dimox/Playdio'; // Your redirect uri
 
 module.exports = {client_id, client_secret, redirect_uri}
 
