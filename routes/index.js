@@ -167,9 +167,9 @@ router.post('/userList',async function(req, res, next) {
 });
 /* GET  user list playlist  */
 router.post('/userListplaylist',async function(req, res, next) {
-  /* _id:req.body.playlistID */
-  console.log(req.body.playlistID)
-  var user = await radioModel.find({name:'test'}).populate("userInfo.userID").exec()
+
+  var user = await radioModel.find({_id:req.body.playlistID}).populate("userInfo.userID").exec()
+  console.log(user)
   res.json({userList:user[0]})
 });
 router.post('/userAdmin',async function(req, res, next) {
