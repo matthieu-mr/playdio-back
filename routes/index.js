@@ -82,15 +82,12 @@ router.post('/sign-in',async function(req, res, next) {
   ){
     error.push('champs vides')
   }
-  console.log("coucou backend")
 
   if(error.length == 0){
     const user = await userModel.findOne({
       email: req.body.emailFromFront,
       password: req.body.passwordFromFront
     })
-    
-    
     
     if(user){
       result = true
@@ -99,10 +96,12 @@ router.post('/sign-in',async function(req, res, next) {
       error.push('email ou mot de passe incorrect')
       console.log("invalid credentials")
     }
+    console.log(user)
+    res.json({result, user, error})
   }
-  
 
-  res.json({result, user, error})
+
+  
 });
 
 /* --------------------------------------------------------- */
