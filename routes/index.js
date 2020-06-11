@@ -183,8 +183,13 @@ console.log(test)
 });
 
 /* --------------------------------------------------------- */
-/* GET radio */
-router.get('/radio', function(req, res, next) {
+/* POST radio */
+router.post('/radio', async function(req, res, next) {
+  var userId = req.body.userId;
+  var discoverRadio = await radioModel.find();
+  var myRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType:"composer"}}});
+  var communityRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType: "bandmaster"||"public"}}});
+  res.json({discoverRadio, myRadio, communityRadio})
 });
 
 /* --------------------------------------------------------- */
@@ -279,32 +284,32 @@ router.get('/updatetest',async function(req, res, next) {
 
 
 router.get('/test',async function(req, res, next) {
-  var radioName = "Radio Marion"
   var newRadio = await new radioModel({
-    name: radioName,
+    name: "Radio Rock Metal",
     private: true,
-    link: undefined,
-    avatar: undefined,
+    link: "",
+    avatar: "http://www.sickandsound.it/wp-content/uploads/2017/10/Rock-and-metal-in-2018.jpg",
+    tags: ["ROCK","METAL"],
     livePossible:true,
     livePlaying:true,
   })
   newRadio.userInfo.push({
-    gradeType: "admin",
+    gradeType: "bandmaster",
     like:0,
     userID:'5eda3317a70a8042c8814473'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"bandmaster",
     like:0,
     userID:'5eda54934b437a052471a86c'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"composer",
     like:0,
     userID:'5ee00cc69f32fc0ae27decac'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"bandmaster",
     like:0,
     userID:'5ee09f829aba3efe4b68eba4'
   })
