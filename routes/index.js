@@ -189,8 +189,11 @@ router.post('/radio', async function(req, res, next) {
   var discoverRadio = await radioModel.find();
   var myRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType:"composer"}}});
   var communityRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType: "bandmaster"||"public"}}});
+  
+  console.log("discoverRadio /radio", discoverRadio)
   res.json({discoverRadio, myRadio, communityRadio})
 });
+
 
 /* --------------------------------------------------------- */
 /* POST radio playlist from DB */
