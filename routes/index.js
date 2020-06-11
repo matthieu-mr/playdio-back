@@ -16,7 +16,7 @@ const redirect_uri = variables.redirect_uri;
   var client_id = '2a968ca9d4494feaabb6ef9bbdf6c33a'; // Your client id
   var client_secret = '7b8f199f21fb46129da726817a65ece9'; // Your secret
   var redirect_uri = 'https://auth.expo.io/@matthieumr/Playdio'; // Your redirect uri
- */
+*/
 
 /* Ben 
 var client_id = '1284402592a548409fd7d00216992891'; // Your client id
@@ -29,10 +29,6 @@ var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
 var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
-
-// var client_id = '1284402592a548409fd7d00216992891'; // Your client id
-// var client_secret = '0f64b6aee3cc41d586ec7515d58d6ab3'; // Your secret
-// var redirect_uri = 'https://auth.expo.io/@karantass/Playdio'; // Your redirect urisetFirstName
 
 /* --------------------------------------------------------- */
 /* Gestion API Spotify */
@@ -195,65 +191,127 @@ router.get('/radio', function(req, res, next) {
 /* POST radio playlist from DB */
 router.post('/radio-playlist', async function(req, res, next) {
   var userId = req.body.userId;
-  var radio = await radioModel.find({userInfo:{$elemMatch:{userID: userId}}})
+  var radioId = req.body.radioId;
+  var radio = await radioModel.findOne({userInfo:{$elemMatch:{userID: userId}},_id: radioId})
   res.json(radio)
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* --------------------------------------------------------- */
+/* GET test ajout de radio */
 
 router.get('/updatetest',async function(req, res, next) {
-  var test = "test"
+  var radioName = "Radio Marion"
 
   await radioModel.updateOne(
-    {name:test},
-    {$push: {"tracks": {
-      name:"Believe",
-      isrcID:"GBAHT9803002",
-      preview_url:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
-      }}}
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Believe",
+          artist:"Cher",
+          album:"Believe",
+          image:"https://i.scdn.co/image/ab67616d0000b27361c83e0a3e42be611729c840",
+          length:239026,
+          position: 1,
+          isrcID:"GBAHT9803002",
+          upcID:null,
+          spotifyId:"2goLsvvODILDzeeiT4dAoR",
+          href:"https://api.spotify.com/v1/tracks/2goLsvvODILDzeeiT4dAoR",
+          externalUrl:"https://open.spotify.com/track/2goLsvvODILDzeeiT4dAoR",
+          previewUrl:"https://p.scdn.co/mp3-preview/579967c91dc409b693b9819c12bbba83e4d0f9a4?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"spotify:track:2goLsvvODILDzeeiT4dAoR",
+        }
+      }
+    }
   )
 
-  res.json({restlu:true})
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Bohemian Rhapsody - 2011 Mix",
+          artist:"Queen",
+          album:"A Night At The Opera (2011 Remaster)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e319baafd16e84f0408af2a0",
+          length:354320,
+          position:11,
+          isrcID:"GBUM71029604",
+          upcID:null,
+          spotifyId: "4u7EnebtmKWzUH433cf5Qv",
+          href:"https://api.spotify.com/v1/tracks/4u7EnebtmKWzUH433cf5Qv",
+          externalUrl:"https://open.spotify.com/track/4u7EnebtmKWzUH433cf5Qv",
+          previewUrl:null,
+          uri:"spotify:track:4u7EnebtmKWzUH433cf5Qv",
+        }
+      }
+    }
+  )
+
+  await radioModel.updateOne(
+    {name:radioName},
+    {$push: 
+      {"tracks": 
+        {
+          name:"Like a Virgin",
+          artist:"Madonna",
+          album:"Like a Virgin (Reissue)",
+          image:"https://i.scdn.co/image/ab67616d0000b273e09cc42d97962159cd0ab1e6",
+          length:218626,
+          position:3,
+          isrcID:"USWB10002748",
+          upcID:null,
+          spotifyId:"1ZPlNanZsJSPK5h9YZZFbZ",
+          href:"https://api.spotify.com/v1/tracks/1ZPlNanZsJSPK5h9YZZFbZ",
+          externalUrl:"https://open.spotify.com/track/1ZPlNanZsJSPK5h9YZZFbZ",
+          previewUrl:"https://p.scdn.co/mp3-preview/693e9d74bf04462da738351385fdc225cc465edc?cid=774b29d4f13844c495f206cafdad9c86",
+          uri:"spotify:track:1ZPlNanZsJSPK5h9YZZFbZ",
+        }
+      }
+    }
+  )
+
+  res.json({result:true})
 });
 
 
+
+
 router.get('/test',async function(req, res, next) {
-  var test = "test"
+  var radioName = "Radio Marion"
   var newRadio = await new radioModel({
-    name: test,
+    name: radioName,
     private: true,
-    link: test,
-    avatar:test,
+    link: undefined,
+    avatar: undefined,
     livePossible:true,
     livePlaying:true,
   })
   newRadio.userInfo.push({
-    gradeType:test,
+    gradeType: "admin",
+    like:0,
+    userID:'5eda3317a70a8042c8814473'
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
     like:0,
     userID:'5eda54934b437a052471a86c'
-})
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
+    like:0,
+    userID:'5ee00cc69f32fc0ae27decac'
+  })
+  newRadio.userInfo.push({
+    gradeType:"admin",
+    like:0,
+    userID:'5ee09f829aba3efe4b68eba4'
+  })
   
-    await newRadio.save()
+  await newRadio.save()
 
-
-
-  res.json({restlu:true})
+  res.json({result:true})
 });
 /* --------------------------------------------------------- */
 /* GET user playlist */
@@ -261,7 +319,7 @@ router.get('/test',async function(req, res, next) {
 router.post('/user-playlist', async function(req, res, next) {
     // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = '1127664154'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -292,7 +350,7 @@ router.post('/user-search',async function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = 'x7kmell0jps7njqebispe817j'
+          var idSpotify = '1127664154'
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -322,7 +380,7 @@ router.post('/user-search',async function(req, res, next) {
 
     // Matthieu id spotify : "1127664154",
             /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-            var idSpotify = '20jsoqg4lepva2a9osvyqwg1a'
+            var idSpotify = '1127664154'
             /* function qui verrifie si le tocken access et valable */
             await refreshTokens(idSpotify)
             /* recuperation du token access a partir de la bdd */
@@ -341,6 +399,8 @@ router.post('/user-search',async function(req, res, next) {
           'content-type': 'application/json',
           accept: 'application/json' },
         })
+      console.log(JSON.parse(requestPlaylist))
+
       var response = JSON.parse(requestPlaylist.getBody())
       res.json({response})
     });
@@ -351,9 +411,49 @@ router.post('/user-search',async function(req, res, next) {
 
 /* --------------------------------------------------------- */
 /* POST radio create */
-router.post('/radio-create', function(req, res, next) {
-  
+router.post('/radio-create',async function(req, res, next) {
+
+//console.log("recup du back", req.body.infoplaylist)
+let data = req.body.resultat
+
+let datatDecoded = decodeURIComponent(data)
+let dataResult = JSON.parse(datatDecoded)
+console.log("retour json ----------", dataResult.listMusic)
+
+
+
+var test = "test"
+var newRadio = await new radioModel({
+  name: dataResult.name,
+  private: dataResult.isPrivate,
+  link: test,
+  avatar:test,
+  livePossible:true,
+  livePlaying:dataResult.isPlayingOnly,
+})
+
+newRadio.tracks.push(dataResult.listMusic[0])
+
+ await newRadio.save()
+
+
+
+res.json({restlu:true})
+
+
+
+
+console.log(dataResult.name)
+
+//  console.log("retour 2 data",dataResult);
+
+res.json({response:"ok back"})
+
 });
+
+
+
+
 
 /* --------------------------------------------------------- */
 /* PUT radio update */
@@ -375,13 +475,18 @@ router.get('/search', function(req, res, next) {
 /* POST playlist in Play screen */
 router.post('/play', async function(req, res, next) {
 
+
+
+
+
+  
+
+
   /* idPlaylist posted from Front */ 
   var idPlaylist = req.body.idPlaylist;
-
   /* idSpotify posted from Front */ 
   var idSpotify = req.body.idSpotify;
   await refreshTokens(idSpotify);
-
   /* Recuperation of the access token from DB */
   const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
   const userAccessToken =  user[0].musicAccounts[0].accessToken;
@@ -401,40 +506,6 @@ router.post('/play', async function(req, res, next) {
 
 });
 
-
-/* ******************************************** */
-/* NOT USED FOR THE MOMENT... */
-/* ******************************************** */
-/* GET music play */
-router.post('/play-track', async function(req, res, next) {
-  
-  /* Track href posted from Front */
-  var currentTrack = req.body.currentTrack;
-
-  /* idSpotify posted from Front */ 
-  var idSpotify = req.body.idSpotify;
-  await refreshTokens(idSpotify);
-
-  /* Recuperation of the access token from DB */
-  const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}});
-  const userAccessToken =  user[0].musicAccounts[0].accessToken;
-
-  /* Spotify track request */
-  var requestTrack = request('GET',`${currentTrack}`,{
-    headers:
-        { 
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+userAccessToken
-        }
-    }
-  )
-  var response = JSON.parse(requestTrack.getBody());
-  var headers = JSON.parse({'Accept': 'application/json','Content-Type': 'application/json','Authorization': 'Bearer '+ userAccessToken});
-  var currentTrackParse = JSON.parse(currentTrack)
-  res.json({response: response, currentTrack: currentTrackParse, headers: headers})
-
-});
 
 
 /* --------------------------------------------------------- */
