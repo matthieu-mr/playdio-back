@@ -203,8 +203,13 @@ router.post('/addUser',async function(req, res, next) {
 });
 
 /* --------------------------------------------------------- */
-/* GET radio */
-router.get('/radio', function(req, res, next) {
+/* POST radio */
+router.post('/radio', async function(req, res, next) {
+  var userId = req.body.userId;
+  var discoverRadio = await radioModel.find();
+  var myRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType:"composer"}}});
+  var communityRadio = await radioModel.find({userInfo:{$elemMatch:{userID: userId, gradeType: "bandmaster"||"public"}}});
+  res.json({discoverRadio, myRadio, communityRadio})
 });
 
 /* --------------------------------------------------------- */
@@ -299,32 +304,32 @@ router.get('/updatetest',async function(req, res, next) {
 
 
 router.get('/test',async function(req, res, next) {
-  var radioName = "Radio Marion"
   var newRadio = await new radioModel({
-    name: radioName,
+    name: "Radio Rock Metal",
     private: true,
-    link: undefined,
-    avatar: undefined,
+    link: "",
+    avatar: "http://www.sickandsound.it/wp-content/uploads/2017/10/Rock-and-metal-in-2018.jpg",
+    tags: ["ROCK","METAL"],
     livePossible:true,
     livePlaying:true,
   })
   newRadio.userInfo.push({
-    gradeType: "admin",
+    gradeType: "bandmaster",
     like:0,
     userID:'5eda3317a70a8042c8814473'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"bandmaster",
     like:0,
     userID:'5eda54934b437a052471a86c'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"composer",
     like:0,
     userID:'5ee00cc69f32fc0ae27decac'
   })
   newRadio.userInfo.push({
-    gradeType:"admin",
+    gradeType:"bandmaster",
     like:0,
     userID:'5ee09f829aba3efe4b68eba4'
   })
@@ -339,7 +344,7 @@ router.get('/test',async function(req, res, next) {
 router.post('/user-playlist', async function(req, res, next) {
     // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = '1127664154'
+          var idSpotify = req.body.idSpotify
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -348,7 +353,8 @@ router.post('/user-playlist', async function(req, res, next) {
           /* request vers spotify */
 
       // Matthieu id spotify : "1127664154",
-      let userIdSpotify=1127664154
+      let userIdSpotify=req.body.idSpotify
+      console.log("recup from front",req.body.idSpotify)
 
 
 
@@ -370,7 +376,7 @@ router.post('/user-search',async function(req, res, next) {
 
   // Matthieu id spotify : "1127664154",
           /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-          var idSpotify = '1127664154'
+          var idSpotify = req.body.userId
           /* function qui verrifie si le tocken access et valable */
           await refreshTokens(idSpotify)
           /* recuperation du token access a partir de la bdd */
@@ -379,8 +385,6 @@ router.post('/user-search',async function(req, res, next) {
           /* request vers spotify */
 
   let title = req.body.search_term
-  
-
   var requestPlaylist = request('GET',`https://api.spotify.com/v1/search?q=${title}&type=track`,{
     headers:
         { 
@@ -400,26 +404,22 @@ router.post('/user-search',async function(req, res, next) {
 
     // Matthieu id spotify : "1127664154",
             /*information a mettre en dur pour l'instant. il faudra créer un store pour recuperer cette donnée  */
-            var idSpotify = '1127664154'
+            var idSpotify = req.body.idSpotify
             /* function qui verrifie si le tocken access et valable */
             await refreshTokens(idSpotify)
             /* recuperation du token access a partir de la bdd */
             const user = await userModel.find({musicAccounts:{$elemMatch:{platfornUserID: idSpotify}}})
             const userAccessToken =  user[0].musicAccounts[0].accessToken
             /* request vers spotify */
-  
+
     let playlist_id = req.body.idPlayslistSpotifyFromFront
   
     var requestPlaylist = request('GET',`https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,{
       headers:
           { 
-          'postman-token': '7df9b449-eb44-a946-dace-115e5ca76d41',
-          'cache-control': 'no-cache',
           'Authorization': 'Bearer '+userAccessToken,
-          'content-type': 'application/json',
           accept: 'application/json' },
         })
-      console.log(JSON.parse(requestPlaylist))
 
       var response = JSON.parse(requestPlaylist.getBody())
       res.json({response})

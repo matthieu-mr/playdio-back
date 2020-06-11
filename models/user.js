@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
     lastName: String,
     email: String,
     password: String,
-    avatar:String,
+    avatar: String,
     phoneNumber:Number,
     accountType:String,
     musicAccounts:[musicAccounts],
