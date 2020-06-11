@@ -316,7 +316,7 @@ var idSpotifyFromBase = await userModel.findOne(
   )
 
 
-console.log("result body ----",dataResult.infoUser.email)
+console.log("result body ----",dataResult.listMusic[0].image)
 
 let test ="stringAafficher";
 let name = dataResult.name
@@ -326,17 +326,17 @@ let name = dataResult.name
     name: dataResult.name,
     private: dataResult.isPrivate,
     link: test,
-    avatar:test,
+    avatar:dataResult.listMusic[0].image,
     livePossible:true,
     tracks:dataResult.listMusic, 
   })
       newRadio.userInfo.push({
-        gradeType: "bandmaster",
+        gradeType: "composer",
         like:0,
         userID:idSpotifyFromBase._id
       })
   
-await newRadio.save()
+ await newRadio.save()
 
 
 var idRadio = await radioModel.findOne(
