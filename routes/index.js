@@ -354,6 +354,16 @@ res.json({response:"ok back"})
 
 
 
+/* --------------------------------------------------------- */
+/* Post radio delete */
+router.post('/radio-delete', async function(req, res, next) {
+
+  var radioId = req.body.radioId;
+  var result = await radioModel.deleteOne({_id: radioId});
+
+  res.json(result)
+
+});
 
 
 /* --------------------------------------------------------- */
@@ -361,10 +371,7 @@ res.json({response:"ok back"})
 router.put('/radio-update', function(req, res, next) {
 });
 
-/* --------------------------------------------------------- */
-/* DELETE radio delete */
-router.delete('/radio-delete', function(req, res, next) {
-});
+
 
 /* --------------------------------------------------------- */
 /* GET search */
