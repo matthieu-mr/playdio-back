@@ -21,3 +21,7 @@ var client_id = 'a4468fd654fa4ee49b7a21052e9ae4c0'; // Your client id
 var client_secret = 'e26ed95f1d5e43cc8f0eaf161e96bc69'; // Your secret
 var redirect_uri = 'https://auth.expo.io/@mariont/Playdio'; // Your redirect uri
 */
+
+// var client_id = '8dbe43696ee2473581711c4f408ada5a'; // Your client id
+// var client_secret = 'c904a6b2fc1146308341ea778c5a65da'; // Your secret
+// var redirect_uri = 'https://auth.expo.io/@dimox/Playdio'; // Your redirect uri
